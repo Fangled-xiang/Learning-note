@@ -9,8 +9,8 @@
 5.若需使用中文，需要点击右下角utf'-8，修改成simple-chinese  变成GBK（simple chinese）
 6.cin读入中文问题：同上，修改成（记得选保存）
 
+## Buge：
 
-Buge：
 1.记得先关闭终端再一键运行启动
 2.记得只能有一个main函数
 3.add_executable一定要放在后面
@@ -18,6 +18,7 @@ Buge：
 5.opencv没有为我们编译好的MINGW版本，他的编译器是MSVC版本，所以要自己编译source源码，或网上另外下载
 6.再一键debug前，还是需要先通过cmake一下，就是建立新的文件夹的时候！！！！，（好像保存一下就可以）
 6.2 include的时候会报错，一般要编译一下才引入或者保持makelist
+
 7.    Node(int data=0)
     : data_(data)
     , next_(nullptr)
@@ -28,6 +29,8 @@ Buge：
 
 c++基础和c语言几乎一样；
 
+8.有时候传入参数有问题，比如 read（string Path） ，，就修改成（const string Path）！！！
+
 # c++进阶：
 
 1.输入枚举类型需要强转       
@@ -37,7 +40,11 @@ c++基础和c语言几乎一样；
 2.指针前面加上 *就可以打印了，解指针 int*age；  cout<<*age<<endl;
 2.清屏 system("cls")、暂停("pause")
 
-3.  强转：static_cast<int>
+3. 强转：static_cast<int>
+
+4. 数据类型转换：atoi（）字符型转化成int
+
+   ​						.c_str()  字符列表转换成字符串
 
 ## c++核心编程：
 
@@ -171,7 +178,7 @@ const（放在后面） 修饰成员函数： void func（）  const
 	打开方式：ios：:in只读，ios::out写、ate 文件尾，app追加的方式、trunc存在先删除在创建，binary二进制
 	    一起使用：ios::biary  |  ios::out  加上位或符号
 读文件操作：
-	ifstream ifs;     ifs.open(""，in)； 
+	ifstream ifs;     ifs.open(""，ios：：in)； 
 	ifs.is_open() 判断打开
 	读取方式： 第一种：buf[1024] = {}  ;   while（ifs >> buf）{ cout << buf<<endl;  };
 		第二种：while（ifs.getline（buf， sizeof（buf））） {cout << buf<<endl;}；
@@ -180,7 +187,36 @@ const（放在后面） 修饰成员函数： void func（）  const
 二进制文件：写：ofs.write（（const char*）&p ， sizeof（p））；
 	    读：ofs.read（（char*）&p ， sizeof（p））；   文件里时乱码，但是可以输出出来读得懂的
 
+按行读取等可参考：https://blog.csdn.net/qq_41920323/article/details/141201645
+
+字符串分割：https://zhuanlan.zhihu.com/p/669544380
+
 可以考虑保存到csv文件中，可以有记事本打开，每个数据都是靠逗号隔开、也可以用excel打开
+
+
+
+补充：
+
+（还有bug没解决，放弃，不好用）c语言里FILE *fp的操作：https://blog.csdn.net/qq_73781875/article/details/136503842
+
+    void readfile(const string filePath)  ！！！vscode里必需加const（自己摸索的）
+    {
+        FILE* pf = fopen(filePath.c_str(),"r");   //打开一个文件
+        
+        while (!feof(pf))  //读到末尾
+        {
+            char line[1024] = {0};
+            fgets(line, 1024, pf);   //按行读取
+            char *num = strtok(line,",");   //按，分隔
+            while(num != nullptr)
+            {
+                ....
+                num = strtok(nullptr,",");  //读完一个继续读，按，分隔
+            }
+        }
+        fclose(pf);
+        
+    }
 
 
 
@@ -365,6 +401,12 @@ STL的内建函数对象：
 关系仿函数：greater、less、equal_to、not_equal_to  less/greater_equal
 
 逻辑仿函数：与或非：logica_and、or、not  很少用
+
+
+
+补充： emplace_back()  于push—back（）的区别：
+
+​	emplace可以调用自定义类型的默认构造：vec.push_back(struc(" aaa"));  ==  vec.emplace—back（“aaa”）
 
 
 
