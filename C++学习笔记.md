@@ -1,68 +1,65 @@
-1.下载
-
 # VScode
 
-2.下载编译器MinGW
-3.下载插件、注意cmake还需要在观望下载
+1.下载VScode
+
+2.下载编译器MinGW（windows下用的）
+3.下载插件、注意cmake还需要在官网下载
 4.cmake使用（多文件编译）：建立CMakeList文件，ctrl+shift+p 配置、配置完生成build，cd进入build执行cmake生产makefile、使用编译器编译mingw-mian.exe执行
 5.执行生成在build的output.exe文件即可，如果想VScode一键生成，要配置.VScode文件的task和launch文件
 5.若需使用中文，需要点击右下角utf'-8，修改成simple-chinese  变成GBK（simple chinese）
 6.cin读入中文问题：同上，修改成（记得选保存）
 
-## Buge：
+## Bug：
 
-1.记得先关闭终端再一键运行启动
-2.记得只能有一个main函数
-3.add_executable一定要放在后面
-4..a文件才是静态库，用动态库的时候会出问题，要用target_link
+1.记得先关闭终端再一键运行启动，exe程序还在执行，没法生成新的
+2.记得只能有一个main函数，多文件编译也只能有一个相同的函数（重载版本除外）
+3.MakeFile文件里：add_executable（最后一部生成）一定要放在后面
+4..a文件才是静态库，用动态库的时候会出问题，要用target_link（同时还要给出位置或者加入环境变量）
 5.opencv没有为我们编译好的MINGW版本，他的编译器是MSVC版本，所以要自己编译source源码，或网上另外下载
-6.再一键debug前，还是需要先通过cmake一下，就是建立新的文件夹的时候！！！！，（好像保存一下就可以）
-6.2 include的时候会报错，一般要编译一下才引入或者保持makelist
+6.再一键debug前，还是需要先通过cmake一下，就是建立新的文件夹的时候！！！！，（或者保存一下就可以）
 
-7.    Node(int data=0)
-    : data_(data)
-    , next_(nullptr)
-    , pre_(nullptr){}
-    int data_;
-    Node* next_;
-    Node* pre_; 对顺序有着严格的要求不知道为什么
-
-c++基础和c语言几乎一样；
+7.include的时候会报错，一般要编译一下才引入或者保存makelist
 
 8.有时候传入参数有问题，比如 read（string Path） ，，就修改成（const string Path）！！！
 
+9.cin >> x >> y;输入的时候需要加空格分离
+
 # c++进阶：
+
+补充：
 
 1.输入枚举类型需要强转       
         Gender gender;
         cout << "请输入性别：";
         cin >> (int&)gender;
-2.指针前面加上 *就可以打印了，解指针 int*age；  cout<<*age<<endl;
-2.清屏 system("cls")、暂停("pause")
+2.指针前面加上 *就可以打印了，解指针操作 int*age；  cout<<*age<<endl;
+3.清屏 system("cls")、暂停("pause")
 
-3. 强转：static_cast<int>
+4.强转：static_cast<int>
 
-4. 数据类型转换：atoi（）字符型转化成int
+数据类型转换：atoi（）字符型转化成int
 
-   ​						.c_str()  字符列表转换成字符串
+​						.c_str()  字符列表转换成字符串
 
-## c++核心编程：
+5.using unit = unsigned int;，这样下面定义unit类型的时候，就知道是无符号整型了
+
+## 一、内存模型
 
 一、（ 编译后的）内存分区模型：提高灵活性
-代码区（二进制代码）（共享、只读）、
-全局区（全局变量、静态（static，放局部函数里面的也是）、常量（包括字符串常量和const修饰的全局变量）） （int）&a可以查看地址，相隔不远
-栈区（编译器自动分配释放、函数参数值、局部变量（包括main函数内的非静态变量、以及局部的const常量）等）、返回局部变量的地址没有意义
-堆区（程序员分配和释放）、主要是利用  new来开辟内存（~析构释放）  new 和 delete
-	new返回的是类型的指针！！！！  int * p= new int（10）； 数组则是首地址， 数组释放delete[] arr;
+**代码区**（二进制代码）（共享、只读）、
+**全局区**（全局变量、静态（static，放局部函数里面的也是）、常量（包括字符串常量和const修饰的全局变量）） （int）&a可以查看地址，相隔不远
+**栈区**（编译器自动分配释放、函数参数值、局部变量（包括main函数内的非静态变量、以及局部的const常量）等）、返回局部变量的地址没有意义
+**堆区**（程序员分配和释放delete）、主要是利用  new来开辟内存（~析构释放）  new 和 delete
+			new返回的是类型的指针！！！！  int * p= new int（10）； 数组则是首地址， 数组释放delete[] arr;
 
 ## 二、引用
 
-作用：给变量取别名  语法: 数据类型 &别名 = 原名；（必须初始化，且初始化之后不可改变，再指向别的原名）  int &b = a;
+作用：给变量**取别名**  语法: 数据类型 &别名 = 原名；（必须初始化，且初始化之后不可改变，再指向别的原名）  int &b = a;
 函数传参（值传递/地址传递（用指针接）/引用传递）、简化指针修改实参  add（int a）、（int * a）、（int &a）
 	引用作函数返回值：可以作为左值 int &result = test（）   ； int & test（）  ；  
 	int &test02(){static a = 10;return a}  ,     test02（） = 100；！！依然可以改变值
 本质：一个指针常量（相当于： int * const ref = &a ）
-常量引用：修饰形参，防止误操作  showvalue（const int &v）{}；  
+常量引用：修饰形参，防止误操作  showvalue（**const int &v**）{}；  
 将引用作为return 可以实现对一个一直操作
 
 ## 三、函数的重载
@@ -86,41 +83,46 @@ C++面向对象的三大特性：封装、继承、多态
 权限：公共、私有、保护protected（和私有一样，在继承的时候有区别：继承后儿子也能访问的内容）
 对象的初始化和清理：构造函数和析构函数（必须有，不写默认为空函数）
 	构造函数：类名{}将参数进行初始化：有参/无参  ，普通/拷贝构造
-		拷贝构造 Person（const Person &p）、可以重载 Person（）、Person（int id）
+
+**拷贝构造** Person（const Person &p）、可以重载 Person（）、Person（int id）
 		调用（推荐括号法）：Person p1； Person p2（10）；Person p3（p1）；  写成Person p1（）；会被当初函数声明
 			匿名调用：Person(10) ;执行完会直接析构
 		拷贝构造（和构造函数一样不写系统默认构造）：在将类作为参数传给一个函数时，会默认拷贝，，
 			return 类时也会默认拷贝（这两种会自行调用）
-			深拷贝（在堆区申请空间进行拷贝、使用到了 new时）/浅拷贝（简单赋值拷贝）：
+			**深拷贝**（在堆区申请空间进行拷贝、使用到了 new时）/浅拷贝（简单赋值拷贝）：
 			浅拷贝问题：堆区会重复析构释放，堆区数据共用的-->使用深拷贝解决：重新开辟内存自行编写拷贝函数
 				例： 定义时使用 int * age；   -->age = new int （*p.age）    *p.age解指针
 	析构函数：~类名{}  无需手动调用、销毁前自动析构调用，堆区的数据都需要编写析构，以及将野指针置nullptr
 	初始化列表Person（int a ，int b, int c）  赋初值
 		   ：m_A(20) ,m_B(30),m_C(40)  {}  写成一行行更直观
-类内声明，类外实现：string Person：：getname（）{};！！另一种封装方式
+**类内声明，类外实现**：string Person：：getname（）{};！！另一种封装方式（）比如：.h文件和.cpp文件
+
 类对象作为类成员：class A是 class B的 一个成员，会先构造A，在构造B，析构相反
-2.
-静态成员：静态成员变量、静态成员函数
+
+**2.静态成员**：静态成员变量、静态成员函数
 	static 所以对象共用一份数据、（编译时就分配内存了），不属于某个对象（可以直接通过类名访问而不用创建对象：Person：：m_A;）
 	必须有初始值（同时，在类内声明{public:static int m_A;};，在类外!！！！s初始化  int Person：：m_A = 100;）私有的也无法访问
 	
 静态成员函数：所以对象共享，且只能访问静态成员变量 static void func（);,同样可以直接通过类名访问函数调用
+
 3.
-C++对象模型和this指针：
+C++对象模型和**this指针：**
 	成员变量和成员函数分开存储：只有非静态成员变量才会属于类的对象上
 this指针：成员函数也只有一份实例，通过this指针来确定函数指向具体的对象（不用自己写）
 	形参和成员变量同名，通过this区分，（this->age = age）当非静态成员函数返回对象本身可以使用 return *this（解指针操作）
 	也是指针常量（不可以修改，在成员函数里面指向当前对象）
 空指针访问成员函数： Person *p = NULL；  p.成员函数（）；-->如果里面含有this指针会报错
+
 4.
 const（放在后面） 修饰成员函数： void func（）  const
 	不可以修改成员属性（成员属性声明时加上mytable就可以修改）；
 常对象：const Person p；  常对象只能调用常函数 
 5.
-友元：friend  全局函数做友元、类作友元、成员函数作友元
+**友元：**friend  全局函数做友元、类作友元、成员函数作友元
    全局函数作友元：在class的最前面加入friend 全局函数声明（类最上边就行）
    类：同上，在类的最前面加上 friend class 类名；
    成员函数作友元：friend void 类名：：成员函数名（）；
+
 6.运算符重载：（给运算符重新定义功能来适应不同的数据类型）  operator
 	实现两个自定义的数据类型的运算、--》通过成员函数/全局函数重载
      "+ "重载：  成员函数实现：Person  operator+ （person &p）{ Person p3； ... ； return p3}
@@ -138,12 +140,13 @@ const（放在后面） 修饰成员函数： void func（）  const
 （重中之重）
 
 ​        定义类时，下级成员有上级的共性，也有自己的特性
-​        基础语法：class Java：public BasePage  {   }；  即可，减少重复的代码 
-继承方式：公共继承、保护继承、私有继承     class 子类（派生类）：public/private/protected 父类（基类）{ ... }；
+​        基础语法：class Java**：public BasePage**  {   }；  即可，减少重复的代码 
+继承方式：**公共继承、保护继承、私有继承**     class 子类（派生类）：public/private/protected 父类（基类）{ ... }；
 ​	区别：父类的私类都是无法访问的，公有继承，公共还是公共，保护还是保护
-​	          保护/私有继承，继承下来的都会变成保护/私有
+​	          保护/私有继承，继承下来的都会变成保护/私有 ！！！
+
 继承中的对象模型：
-​	父类中所以非静态的成员属性都会继承（私有访问不到，也会继承下来）
+​	父类中所有非静态的成员属性都会继承（私有访问不到，也会继承下来）
 ​	构造/析构顺序：（和类中有类一样）：先构造父类、后析构父类
 继承同名成员：子类定义的成员值，使用父类的要加作用域： s.Base：：m_A
 ​	   同名成员函数和成员调用一样：s.Base：：func（）；  重载版本也不行
@@ -156,20 +159,26 @@ const（放在后面） 修饰成员函数： void func（）  const
 
 ### 三、多态
 
-静态多态：函数重载、运算符重载       动态多态：派生类和虚函数实现运行时多态
-区别：静态多态在编译阶段就确定函数地址、动态则是在运行阶段
-例子： 在父类中函数前 补上virtual void func（）；  这样就可以实现地址晚绑定，  test（Animal  &animal） 传入 子类cat时，会优先调用cat的同名函数
-          动态多态满足条件：1.有继承关系 2.子类需要重写父类的虚函数
+静态多态：函数重载、运算符重载       
+
+动态多态**：派生类和虚函数**实现运行时多态
+
+区别：静态多态在编译阶段就确定函数地址、动态则是在运行阶段！！！
+
+例子： 在**父类中**函数前 补上virtual void func（）；  这样就可以实现地址晚绑定，  因为test（Animal  &animal） 传入 子类cat时，会优先调用cat的同名函数
+          **动态多态满足条件：1.有继承关系 2.子类需要重写父类的虚函数**
            使用：父类的指针或者引用，来执行子类的对象（如上）
+
 优点：代码组织结构更清晰、可读性强、利于前期和后期的维护与拓展
 开闭原则：对拓展进行开发、对修改进行关闭
 	test（）{   Abscaculate *abc = new addcaculate ；}  new一下就可以指向子类对象、使用完记得释放 delete！！在堆区上的
+
 纯虚函数和抽象类：纯虚函数： virtual 返回值类型 函数名 （参数列表） =0；  有一个纯虚函数就会成为抽象类，且不能依赖实例化对象。
 	子类必需重写：   vitural 返回值类型 函数名 （参数列表）{}；
 虚析构和纯虚析构：多态使用时，如果有类开辟到堆区new，父指针在释放时无法调用子类的析构代码--》虚析构/纯虚析构解决
 	区别同上：无法实例化对象   virtual ~类名（）{} ；    virtual ~类名（） = 0；（纯虚析构需要有声明，在类外还需要有实现，父类有些开辟到堆区也需要析构）
 
-## 文件操作：
+## 五、文件操作：
 
 #include<fstream>
 文本文件、二进制文件、ofstream写操作、ifstream 读操作、fstream读写操作
@@ -178,7 +187,7 @@ const（放在后面） 修饰成员函数： void func（）  const
 	打开方式：ios：:in只读，ios::out写、ate 文件尾，app追加的方式、trunc存在先删除在创建，binary二进制
 	    一起使用：ios::biary  |  ios::out  加上位或符号
 读文件操作：
-	ifstream ifs;     ifs.open(""，ios：：in)； 
+	ifstream ifs;     ifs.open(""，ios：：in)； //！！！一定记得是加绝对路径
 	ifs.is_open() 判断打开
 	读取方式： 第一种：buf[1024] = {}  ;   while（ifs >> buf）{ cout << buf<<endl;  };
 		第二种：while（ifs.getline（buf， sizeof（buf））） {cout << buf<<endl;}；
@@ -233,6 +242,7 @@ const（放在后面） 修饰成员函数： void func（）  const
          函数返回类型和形参可以先不确定类型；
 	使用：自动类型推导(必需推导出一致的数据类型)，或者显示指定类型 swap<int>(a,b);（在无法自动推出时需要指定）
 	自动类型推导无法发生隐式类型转换：比如int + char形的
+
 2.与普通函数都可以实现：优先调用普通函数 ，非要使用可以加上空模板<>
 	模板函数也可以重载
 3.模板的局限性
@@ -247,10 +257,13 @@ const（放在后面） 修饰成员函数： void func（）  const
 			    2参数模板化： template<class T1 ,class T2> void func（Person<T1,T2> &p）
 			     3.整个类模板化 template<class T> void func（T &p）
 	类模板成员函数：
-		类内实现：和之前一样，类外实现：类内只写声明，类外：template<class T1 ,class T2>
+		类内实现：和之前一样，类外实现：**类内只写声明，类外**：template<class T1 ,class T2>
 							Person<T1,T2>::Showperson(T1 name, T2 name){  };加上作用域和template
-	成员函数的类外实现：template<class T1 ,class T2>   void Person<T1,T2>::showPeerson(){} ; 注意和上面的区别
-5.类模板的分文件编写
+	**成员函数的类外实现**：template<class T1 ,class T2>   void Person<T1,T2>::showPeerson(){} ; 注意和上面的区别
+
+
+
+**5.类模板的分文件编写**
 	类模板成员函数的创建是在调用阶段，分文件编写可能会链接不到
 		方式1：直接包含.cpp文件，方式2：将声明和实现写到同一个文件中，后缀名改成.hpp
 
@@ -382,31 +395,31 @@ for(list<student>::iterator it=l.begin();it!=l.end();it++)
     人家是根据键值key来排序（仿函数应该是int参数）的、所以自定义类型数据排序根本没必要
     
 
-### 函数对象
+### 函数对象、仿函数、谓词
 
-​	函数对象：仿函数---**重载**函数调用操作符的类，其对象称为函数对象，当重载（）操作时也叫仿函数
+重载函数的类（函数对象）   --》重载（）操作（仿函数） --》  返回时 bool类型（谓词）
+
+​	函数对象：仿函数---**重载**函数调用操作符的类，其对象称为函数对象，当**重载（）**操作时也叫仿函数
 
 本质：一个类，而不是函数、可以有自己状态 例如：count、可以作为参数传递
 
 使用：  Myadd  myadd；  myadd（1,2）；  
 
-​	谓词：一元谓词（返回bool类型的仿函数），opertor（）（一个参数一元谓词），两个是二元谓词（常用来指定排序规则，sort函数需要、特别是自定义类型）
+​	**谓词：**一元谓词（返回bool类型的仿函数），opertor（）（一个参数一元谓词），
+
+​				两个是二元谓词（常用来指定排序规则，sort函数需要、特别是自定义类型）
+
+
 
 STL的内建函数对象：
 
-​	算术仿函数、关系仿函数、逻辑仿函数：#include<functional>
+​	算术仿函数、关系仿函数、逻辑仿函数：**#include<functional>**
 
 算术仿函数：加减乘除取模取反plus、minus、multiplies、divides、modulus、negate（取反是一元运算）
 
-关系仿函数：greater、less、equal_to、not_equal_to  less/greater_equal
+关系仿函数：**greater、less**、equal_to、not_equal_to  less/greater_equal
 
 逻辑仿函数：与或非：logica_and、or、not  很少用
-
-
-
-补充： emplace_back()  于push—back（）的区别：
-
-​	emplace可以调用自定义类型的默认构造：vec.push_back(struc(" aaa"));  ==  vec.emplace—back（“aaa”）
 
 
 
@@ -424,7 +437,7 @@ STL的内建函数对象：
 
 ​					transform搬运容器到另一个
 
-2.查找算法：find返回迭代器、find_if（按条件查找beg，end、 条件的谓词返回bool类型）、
+2.查找算法：find返回迭代器、**find_if**（按条件查找beg，end、 条件的谓词返回bool类型）、
 
 adjacent_find（查找相邻重复元素，传入区间，返回第一个迭代器位置）
 
@@ -438,7 +451,7 @@ adjacent_find（查找相邻重复元素，传入区间，返回第一个迭代�
 
 ​	random_shuffle（迭代器区间）  洗牌打乱顺序	
 
-​	merge（beg1，end1，beg2，end2，beg3）目标容器的起始迭代器， 容器元素合并，vec3必须先分配内存，都是有序的，合并之后依然是有序的，否则乱序
+​	合并算法**merge**（beg1，end1，beg2，end2，beg3）目标容器的起始迭代器， 容器元素合并，vec3必须先分配内存，都是有序的，合并之后依然是有序的，否则乱序
 
 ​	reverse反转，首尾对调
 
@@ -465,6 +478,8 @@ adjacent_find（查找相邻重复元素，传入区间，返回第一个迭代�
 ​	 差：set_difference（）、第三个容器resize（max（size1， ..2））	
 
 ​			（区间1，区间2），求的是1和2的差集，即1有2没有的部分
+
+
 
 
 
