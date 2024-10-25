@@ -4,6 +4,7 @@
 快捷键：
 
 ctr+C 强制停止命令
+ctl+alt+enter可以进入虚拟机的全屏
 
 # Linux命令：
 
