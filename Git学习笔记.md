@@ -130,6 +130,16 @@ ssh-keygen -t rsa -C 3102467705@qq.com（直接三次回车生成.ssh文件）
 
 ​	git remote -v查看别名
 
+
+
+别忘了配置：（一台电脑一次就行）
+
+git config --global user.name 用户名  
+
+git config --global user.email 邮箱
+
+
+
 在对应的远程仓库点击code，复制ssh链接，按如上设置别名
 
 ## 3.常用操作
@@ -167,6 +177,24 @@ IDE使用码云（后面再看）
 码云导入GitHub的项目（创建时导入已有仓库，注意要用http协议）
 
 ​	码云强制同步Github点击仓库名旁边的刷新标志即可
+
+
+
+
+
+# GitLab
+
+自建代码托管平台
+
+（先略）
+
+
+
+
+
+
+
+
 
 
 
