@@ -104,43 +104,43 @@ Git的主打特性：
 
 
 
-pull和clone的区别，一个是自己创建的，一个是完全复制别人的
+pull和clone的区别，一个是完全复制的，pull是更新
 
 **注意：修改完都要保存提交本地库、然后才推送远程库**
 
 # GitHub
 
-创建远程仓库别名
-
-​	git remote -v
-
-​	git remote add  别名 https://github.com/Fangled-xiang/Learning-note
-
-​	git remote -v查看别名
-
-
-
-推送：
-
-​	git  push  别名 分支（master）
-
-## SSH免密登录：
+## 1.SSH免密登录
 
 在c盘用户文件夹，打开git终端，然后添加秘钥
 
-ssh-keygen -t rsa -C 3102467705@qq.com（直接三次回车）
+ssh-keygen -t rsa -C 3102467705@qq.com（直接三次回车生成.ssh文件）
 
-生成.ssh文件
-
-
+查看公钥 cat id_rsa.pub 复制下来
 
 
 
+进入GitHub点击头像-设置-SSHandGPG keys，添加新的sshkeys复制进去
 
+## 2.**远程仓库别名**
 
+​	git remote -v
 
+​	git remote add  别名 git@github.com:Fangled-xiang/Learning-note.git
 
+​	git remote -v查看别名
 
+在对应的远程仓库点击code，复制ssh链接，按如上设置别名
 
+## 3.常用操作
 
+推送： git push 别名 分支名  （需要先提交本地库）
+
+​		github上会有一个main分支，上传过去是上传到master分支默认
+
+拉取：git pull  别名 分支名   （会自动提交本地库）
+
+克隆：  先新建一个工程文件夹（不需要init），  git clone 链接
+
+​			会自动init本地仓库、并创建别名（origin）、可以在自己创建一个别名
 
